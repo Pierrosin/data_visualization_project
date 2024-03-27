@@ -16,6 +16,8 @@ import preprocess
 app = dash.Dash(__name__)
 app.title = 'Projet | INF8808'
 
+server = app.server
+
 species = preprocess.getSpeciesList()
 
 # with open('../src/assets/data/countriesData.json') as data_file:
