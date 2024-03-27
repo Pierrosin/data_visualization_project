@@ -1,108 +1,98 @@
 
 # -*- coding: utf-8 -*-
 
-'''
-    File name: app.py
-    Author: Olivia Gélinas
-    Course: INF8808
-    Python Version: 3.8
-
-    This file is the entry point for our dash app.
-'''
+import json
 
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Input, Output
 
 import pandas as pd
+import numpy as np
 
 import preprocess
-import heatmap
-import line_chart
-import template
-
+# import bubble
 
 app = dash.Dash(__name__)
-app.title = 'TP3 | INF8808'
+app.title = 'Projet | INF8808'
 
-server = app.server
+species = preprocess.getSpeciesList()
 
-dataframe = pd.read_csv('./assets/data/arbres.csv')
+# with open('../src/assets/data/countriesData.json') as data_file:
+#     data = json.load(data_file)
 
-dataframe = preprocess.convert_dates(dataframe)
-dataframe = preprocess.filter_years(dataframe, 2010, 2020)
-yearly_df = preprocess.summarize_yearly_counts(dataframe)
-data = preprocess.restructure_df(yearly_df)
+# df_2000 = pd.json_normalize(data, '2000')
+# df_2015 = pd.json_normalize(data, '2015')
 
-template.create_custom_theme()
-template.set_default_theme()
+# df_2000 = preprocess.round_decimals(df_2000)
+# df_2015 = preprocess.round_decimals(df_2015)
+
+# gdp_range = preprocess.get_range('GDP', df_2000, df_2015)
+# co2_range = preprocess.get_range('CO2', df_2000, df_2015)
+
+# df = preprocess.combine_dfs(df_2000, df_2015)
+# df = preprocess.sort_dy_by_yr_continent(df)
+
+# fig = bubble.get_plot(df, gdp_range, co2_range)
+# fig = bubble.update_animation_hover_template(fig)
+# fig = bubble.update_animation_menu(fig)
+# fig = bubble.update_axes_labels(fig)
+# fig = bubble.update_template(fig)
+# fig = bubble.update_legend(fig)
+
+# fig.update_layout(height=600, width=1000)
+# fig.update_layout(dragmode=False)
+print(np.linspace(1960, 2023, 10, dtype=int))
 
 app.layout = html.Div(className='content', children=[
     html.Header(children=[
-        html.H1('Trees planted in Montreal neighborhoods'),
-        html.H2('From 2010 to 2020')
+        html.H1('Les arbres de Montréal'),
     ]),
     html.Main(className='viz-container', children=[
-        dcc.Graph(
-            id='heatmap',
-            className='graph',
-            figure=heatmap.get_figure(data),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-        dcc.Graph(
-            id='line-chart',
-            className='graph',
-            figure=line_chart.get_empty_figure(),
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        )
+        # dcc.Graph(className='graph', figure=fig, config=dict(
+        #     scrollZoom=False,
+        #     showTips=False,
+        #     showAxisDragHandles=False,
+        #     doubleClick=False,
+        #     displayModeBar=False
+        #     )),
+        html.Div(id='maps', children=[
+            html.Div(id='filter', children=[
+                dcc.Dropdown(id='specie',
+                    options=species,
+                    placeholder='Espèces',
+                    multi=True,
+                ),
+                html.Div(id='date', children=[
+                    dcc.RangeSlider(
+                        id='dateSlider',
+                        min=1960,
+                        max=2023,
+                        step=1,
+                        value=[1960, 2023],
+                        marks={2000: ''}
+                    ),
+                    html.Div(id='minDate', className='cursor min', children=['1960']),
+                    html.Div(id='maxDate', className='cursor max', children=['2023'])
+                ]),
+                html.Div(id='diametre', children=[
+                    dcc.RangeSlider(
+                        id='diametreSlider',
+                        min=0,
+                        max=300,
+                        step=1,
+                        value=[0, 300],
+                        marks={100: ''}
+                    ),
+                    html.Div(id='minDHP', className='cursor min', children=['0']),
+                    html.Div(id='maxDHP', className='cursor max', children=['300'])
+                ])
+                
+                
+            ]),
+            html.Div(id='total'),
+            html.Div(id='arrond'),
+        ]),
+        html.Div(id='swarm')
     ])
 ])
-
-
-@app.callback(
-    Output('line-chart', 'figure'),
-    [Input('heatmap', 'clickData')]
-)
-def heatmap_clicked(click_data):
-    '''
-        When a cell in the heatmap is clicked, updates the
-        line chart to show the data for the corresponding
-        neighborhood and year. If there is no data to show,
-        displays a message.
-
-        Args:
-            The necessary inputs and states to update the
-            line chart.
-        Returns:
-            The necessary output values to update the line
-            chart.
-    '''
-    if click_data is None or click_data['points'][0]['z'] == 0:
-        fig = line_chart.get_empty_figure()
-        line_chart.add_rectangle_shape(fig)
-        return fig
-
-    arrond = click_data['points'][0]['y']
-    year = click_data['points'][0]['x']
-
-    line_data = preprocess.get_daily_info(
-        dataframe,
-        arrond,
-        year)
-
-    line_fig = line_chart.get_figure(line_data, arrond, year)
-
-    return line_fig
