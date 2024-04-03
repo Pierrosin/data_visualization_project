@@ -98,3 +98,6 @@ app.layout = html.Div(className='content', children=[
         html.Div(id='swarm')
     ])
 ])
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
