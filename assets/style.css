@@ -43,6 +43,12 @@ h1 {
     font-weight: normal;
 }
 
+h6 {
+    display:flex;
+    margin:0;
+    justify-content: center;
+}
+
 #maps{
     position:absolute;
     height:80%;
@@ -90,7 +96,7 @@ h1 {
     width:20%;
     height:60%;
     left:40%;
-    top:10%;
+    top:5%;
 }
 
 #diametre{
@@ -98,13 +104,19 @@ h1 {
     width:20%;
     height:60%;
     right:10%;
-    top:10%;
+    top:5%;
 }
 
 .cursor{
     position:absolute;
-    bottom:-5px;
     font-size: 10px;
+    top:25px;
+}
+
+.slider .rc-slider-handle {
+    width: 10px; 
+    height: 10px;
+    top:7px;
 }
 
 .min{

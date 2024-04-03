@@ -44,7 +44,6 @@ species = preprocess.getSpeciesList()
 
 # fig.update_layout(height=600, width=1000)
 # fig.update_layout(dragmode=False)
-print(np.linspace(1960, 2023, 10, dtype=int))
 
 app.layout = html.Div(className='content', children=[
     html.Header(children=[
@@ -66,25 +65,29 @@ app.layout = html.Div(className='content', children=[
                     multi=True,
                 ),
                 html.Div(id='date', children=[
+                    html.H6('Date de plantation'),
                     dcc.RangeSlider(
-                        id='dateSlider',
+                        id='dateSlider', className='slider',
                         min=1960,
                         max=2023,
                         step=1,
                         value=[1960, 2023],
-                        marks={2000: ''}
+                        allowCross=False,  # Ensures the two handles do not cross each other
+                        marks=None,  # Hides the marks
                     ),
                     html.Div(id='minDate', className='cursor min', children=['1960']),
                     html.Div(id='maxDate', className='cursor max', children=['2023'])
                 ]),
                 html.Div(id='diametre', children=[
+                    html.H6('Diamètre du tronc'),
                     dcc.RangeSlider(
-                        id='diametreSlider',
+                        id='diametreSlider', className='slider',
                         min=0,
                         max=300,
                         step=1,
                         value=[0, 300],
-                        marks={100: ''}
+                        allowCross=False,  # Ensures the two handles do not cross each other
+                        marks=None,  # Hides the marks
                     ),
                     html.Div(id='minDHP', className='cursor min', children=['0']),
                     html.Div(id='maxDHP', className='cursor max', children=['300'])
