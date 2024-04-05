@@ -67,30 +67,28 @@ app.layout = html.Div(className='content', children=[
                 html.Div(id='date', children=[
                     html.H6('Date de plantation'),
                     dcc.RangeSlider(
-                        id='dateSlider', className='slider',
+                        id='dateSlider',
                         min=1960,
                         max=2023,
                         step=1,
                         value=[1960, 2023],
                         allowCross=False,  # Ensures the two handles do not cross each other
-                        marks=None,  # Hides the marks
+                        marks=True,  # Hides the marks,
+                        tooltip={"placement": "bottom", "always_visible": True}
                     ),
-                    html.Div(id='minDate', className='cursor min', children=['1960']),
-                    html.Div(id='maxDate', className='cursor max', children=['2023'])
                 ]),
                 html.Div(id='diametre', children=[
                     html.H6('Diamètre du tronc'),
                     dcc.RangeSlider(
-                        id='diametreSlider', className='slider',
+                        id='diametreSlider',
                         min=0,
                         max=300,
                         step=1,
                         value=[0, 300],
                         allowCross=False,  # Ensures the two handles do not cross each other
-                        marks=None,  # Hides the marks
+                        marks=True,  # Hides the marks
+                        tooltip={"placement": "bottom", "always_visible": True}
                     ),
-                    html.Div(id='minDHP', className='cursor min', children=['0']),
-                    html.Div(id='maxDHP', className='cursor max', children=['300'])
                 ])
                 
                 
