@@ -76,7 +76,7 @@ def get_nb_trees_district(df, min_plant_date, max_plant_date, min_dhp, max_dhp, 
     filtered_df = filtered_df[(filtered_df['DHP'] >= min_dhp) & (filtered_df['DHP'] <= max_dhp)]
 
      # Filtrer les arbres pour inclure seulement les espèces spécifiées
-    if species is not None:
+    if species:
         filtered_df = filtered_df[filtered_df['Essence_fr'].isin(species)]
 
     # Compter le nombre d'arbres par arrondissement
