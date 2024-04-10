@@ -3,52 +3,45 @@ import numpy as np
 import pandas as pd
 from scipy.stats import linregress
 
-def getGrowthPerSpecie(data, specie):
-    buffer = data[data['Essence_fr'] == specie]
-    growth = pd.DataFrame({'Plantation':buffer['Date_plantation'], 'Releve': buffer['Date_releve'], 'Diametre':buffer['DHP']}).dropna()
 
-    growth['Plantation'] = pd.to_datetime(growth['Plantation'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-    growth['Releve'] = pd.to_datetime(growth['Releve'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-    growth = growth.dropna()
-    growth['Age'] = ((growth['Releve'] - growth['Plantation']) / np.timedelta64(1, 'Y')).astype(int)
-    a, b, r, _, _ =  linregress(growth['Age'], growth['Diametre'])
-    
-    return a, b, r
+def getGrowthPerSpecie(data):
+    try:
+        a, _, _, _, _ =  linregress(data['Age'], data['DHP'])
+    except:
+        tree = data.iloc[0]
+        a = tree['DHP'] / tree['Age']
+    return round(a*365,2)
 
-def getMeanDHPPerSpecie(data, specie):
-    buffer = data[data['Essence_fr'] == specie]
-    meanDHP = buffer['DHP'].mean()
-    
-    return meanDHP
+def getMeanDHPPerSpecie(data):
+    return data['DHP'].mean()
 
 def swarm(data):
-    species = pd.unique(data['Essence_fr'])
+    uniqueSpecies = pd.unique(data['Essence_fr'])
+    species = []
     growth = []
     meanDHP = []
     nbTrees = []
-    
-    for specie in species:
-        try:
-            a, b, r = getGrowthPerSpecie(data, specie)
-            growth.append(a)
-        except Exception as e:
-            tree = data[data['Essence_fr']==specie].iloc[0]
-            a = tree['DHP'] / (tree['Date_releve'].year - tree['Date_plantation'].year)
-            growth.append(a)
+    for specie in uniqueSpecies:
+        buffer = data[data['Essence_fr'] == specie]
+        buffer = buffer[['Date_plantation', 'Date_releve', 'DHP']].dropna()
+        buffer['Age'] = (buffer['Date_releve'] - buffer['Date_plantation']).dt.days
+        buffer = buffer[buffer['Age'] > 0]
+        if len(buffer) > 0:
+            nbTrees.append(len(buffer))
+            species.append(specie)
+            growth.append(getGrowthPerSpecie(buffer))
+            meanDHP.append(getMeanDHPPerSpecie(buffer))
         
-        meanDHP.append(getMeanDHPPerSpecie(data, specie))
-        nbTrees.append(data[data['Essence_fr'] == specie].shape[0])
-    
-    swarm = pd.DataFrame({'specie': species, 'growth':growth, 'dhp':meanDHP, 'trees':nbTrees})
+    swarm = pd.DataFrame({'specie': species, 'growth':growth, 'dhp':meanDHP, 'trees':nbTrees}).dropna()
     swarm = swarm[(swarm['growth'] > 0) & (swarm['growth'] < 5)]
     maxDHP = swarm['dhp'].max()
-    swarm = swarm[swarm['dhp'] > maxDHP/10].sort_values('dhp', ascending=False)
-    
+    swarm = swarm[swarm['dhp'] > maxDHP/10]
     return swarm
+
 
 def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.5, color='#36749d', seed=0):
     np.random.seed(seed)
-    
+    swarm = swarm.sort_values('dhp', ascending=False)
     x = swarm['growth'].to_numpy()
     size = swarm['dhp'].to_numpy()/30
     
@@ -65,6 +58,9 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
     def isOverlapping(x1, y1, r1, x2, y2, r2):
         r12, r22 = r1, r2
         r1, r2 = r12/ratio, r22/ratio
+        if isInEllipse(x1, y1, x2, y2, r2, r22) or isInEllipse(x2, y2, x1, y1, r1, r12):
+            return True
+
         theta = np.arctan((y2-y1)/(x2-x1))
         if x2 < x1:
             theta += np.pi
@@ -73,7 +69,7 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
             x3 = -x3
         y3 = y1 + x3*np.tan(theta)
         x3 = x1 + x3
-        return isInEllipse(x3, y3, x2, y2, r2, r22)
+        return isInEllipse(x3, y3, x2, y2, r2, r22) 
 
     def anyOverlapping(x, y, r, xClose, yClose, rClose):
         for x2, y2, r2 in zip(xClose, yClose, rClose):
