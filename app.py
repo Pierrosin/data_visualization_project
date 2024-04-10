@@ -16,6 +16,8 @@ import choropleth
 import arrond_map
 import bar_chart
 import swarmplot
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning) 
 # import bubble
 
 app = dash.Dash(__name__)
@@ -23,7 +25,7 @@ app.title = 'Projet | INF8808'
 
 server = app.server
 
-species = preprocess.getSpeciesList()
+
 
 # Fichier geojson pour le choropleth
 with open('assets/montreal.json', encoding='utf-8') as data_file:
@@ -32,8 +34,10 @@ with open('assets/montreal.json', encoding='utf-8') as data_file:
 # Fichier contenant les données sur les arbres
 data = pd.read_csv('assets/arbres-publics.csv')
 
-data = preprocess.preprocess_df(data)
 data = preprocess.removeOutliers(data)
+data = preprocess.preprocess_df(data)
+species = preprocess.getSpeciesList(data)
+
 locations = preprocess.get_neighborhoods(montreal_data)
 
 date_plantation_min = data['Date_plantation'].min()
@@ -62,13 +66,6 @@ app.layout = html.Div(className='content', children=[
         html.H1('Les arbres de la Ville de Montréal'),
     ]),
     html.Main(className='viz-container', children=[
-        # dcc.Graph(className='graph', figure=fig, config=dict(
-        #     scrollZoom=False,
-        #     showTips=False,
-        #     showAxisDragHandles=False,
-        #     doubleClick=False,
-        #     displayModeBar=False
-        #     )),
         html.Div(id='maps', children=[
             html.Div(id='filter', children=[
                 dcc.Dropdown(id='specie',
@@ -84,8 +81,8 @@ app.layout = html.Div(className='content', children=[
                         max=2023,
                         step=1,
                         value=[1960, 2023],
-                        allowCross=False,  # Ensures the two handles do not cross each other
-                        marks=None,  # Hides the marks
+                        allowCross=False,  
+                        marks=None,  
                         tooltip={
                             "always_visible": True,
                             "placement": "bottom",
@@ -101,8 +98,8 @@ app.layout = html.Div(className='content', children=[
                         max=300,
                         step=1,
                         value=[0, 300],
-                        allowCross=False,  # Ensures the two handles do not cross each other
-                        marks=None,  # Hides the marks
+                        allowCross=False,  
+                        marks=None, 
                         tooltip={
                             "always_visible": True,
                             "placement": "bottom",
@@ -128,7 +125,7 @@ app.layout = html.Div(className='content', children=[
                         style={"margin" : "10px", "width": "50%"},),
                         dcc.Graph(figure=choropleth_fig, id='choropleth',
                             config=dict(
-                            scrollZoom=False))       
+                            scrollZoom=False, displayModeBar=False))       
             ]),
 
             html.Div(id='arrond', children=[
@@ -147,7 +144,7 @@ app.layout = html.Div(className='content', children=[
                         style={"margin" : "10px", "width": "50%"},),
                         dcc.Graph(figure=carte_arrond, id='carte_arrond',
                             config=dict(
-                            scrollZoom=True))       
+                            scrollZoom=True, displayModeBar=False))       
             ]),
         ]),
         html.Div(id='barCharts', children=[
@@ -166,7 +163,7 @@ app.layout = html.Div(className='content', children=[
                         style={"margin" : "10px", "width": "50%"},),
                         dcc.Graph(figure=bar_chart_ville, id='barChartVille',
                             config=dict(
-                            scrollZoom=False))       
+                            scrollZoom=False, displayModeBar=False))       
             ]),
 
             html.Div(id='DivBarChartArrond', children=[
@@ -184,7 +181,7 @@ app.layout = html.Div(className='content', children=[
                         style={"margin" : "10px", "width": "50%"},),
                         dcc.Graph(figure=bar_chart_arrond, id='barChartArrond',
                             config=dict(
-                            scrollZoom=False))       
+                            scrollZoom=False, displayModeBar=False))       
             ]),
         ]),
         html.Div(id='swarm', children=[
@@ -199,7 +196,7 @@ app.layout = html.Div(className='content', children=[
                             style={"margin" : "10px", "width": "50%"}),
                     dcc.Graph(figure=swarm_plot, id='swarm_plot',
                         config=dict(
-                        scrollZoom=False))       
+                        scrollZoom=False, displayModeBar=False))       
         ])
     ])
 ])
