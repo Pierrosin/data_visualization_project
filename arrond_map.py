@@ -48,6 +48,7 @@ def getMap(data, arrondissement, critere, filter):
                             zoom=12.5, color_continuous_scale='tempo', hover_data=['Essence_fr', 'Date_plantation_format', 'Date_releve_format', 'DHP'])
     fig.update_layout(mapbox_style="open-street-map", coloraxis_colorbar=dict(title=title))
     fig.update_layout(
+        title=f"Vue de l'arrondissement {arrondissement}",
         coloraxis_colorbar_thickness=23,
         margin=dict(l=60, r=60, t=60, b=60),
     )

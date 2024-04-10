@@ -115,5 +115,7 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
                       '<b>Vitesse de croissance du tronc</b> : %{customdata[1]:.2f} cm/an<br>'
                       ) + "<extra></extra>"
     ))
+
+    fig.update_xaxes(title="Vitesse moyenne de croissance du tronc (cm/an)", dtick=0.5, side='top')
     
     return fig
