@@ -39,7 +39,8 @@ def get_choropleth(data_arrondissement, missing_data, montreal_data, densite=Fal
 
 
     fig.update_layout(
-        title="Vue de la ville de Montréal",
+        title="Vue de la Ville de Montréal",
+        title_x=0.5,
         coloraxis_colorbar_thickness=23,
         coloraxis_colorbar=dict(title=title),
         coloraxis_colorbar_y=0.60,

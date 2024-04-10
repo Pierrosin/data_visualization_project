@@ -188,18 +188,47 @@ app.layout = html.Div(className='content', children=[
             ]),
         ]),
         html.Div(id='swarm', children=[
-                    html.Div(id='div_espece_swarm', children=[
-                        dcc.Dropdown(id='espece_swarm',
+                    dcc.Dropdown(id='espece_swarm',
                             options=especes,
-                            placeholder='Espèce',
+                            placeholder='Trouver une espèce',
                             multi=False,
                             searchable=True,
-                            clearable=True)
-                        ], 
-                            style={"margin" : "10px", "width": "50%"}),
+                            clearable=True),
+                    
+                    html.Div(id='texte_especes_arbres', style={'display': 'flex', 'justify-content': 'flex-end', 'align-items': 'center', "fontSize": "10px"}, children=[
+                        html.H2("Espèces\nd'arbres")
+                    ]),
+
                     dcc.Graph(figure=swarm_plot, id='swarm_plot',
                         config=dict(
-                        scrollZoom=False))       
+                        scrollZoom=False)),
+
+                    html.Div(id='swarm_legend',
+                    style={'display': 'flex'}, children=[
+                        html.P('La taille des bulles correspond au diamètre du tronc moyen de l\'espèce : '),
+                        html.Div(id='bulle5', children=[
+                            html.Div(style={'width': 10, 'height': 10,'border':'1px solid', 'border-radius': 5, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.P("5cm"),
+                        ]),
+
+                        html.Div(id='bulle10', children=[
+                            html.Div(style={'width': 20, 'height': 20,'border':'1px solid', 'border-radius': 10, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.P("10cm"),
+                        ]),
+
+                        html.Div(id='bulle20', children=[
+                            html.Div(style={'width': 30, 'height': 30,'border':'1px solid', 'border-radius': 15, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.P("20cm"),
+                            
+                        ]),
+
+                        html.Div(id='bulle30', children=[
+                            html.Div(style={'width': 50, 'height': 50,'border':'1px solid', 'border-radius': 25, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.P("30cm"),
+                        ])
+                        
+                        
+                    ])       
         ])
     ])
 ])

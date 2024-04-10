@@ -31,6 +31,7 @@ def draw_bar_chart(data, arrond, criterion, top):
 
     fig.update_layout(
         title=title,
+        title_x=0.5,
         xaxis=dict(title="Nombre d'arbres", showline=True, linecolor='black'),
         yaxis=dict(title=pretty_criterion, showline=True, linecolor='black'),
         showlegend=False
