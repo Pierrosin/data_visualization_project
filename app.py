@@ -25,8 +25,6 @@ app.title = 'Projet | INF8808'
 
 server = app.server
 
-
-
 # Fichier geojson pour le choropleth
 with open('assets/montreal.json', encoding='utf-8') as data_file:
     montreal_data = json.load(data_file)
@@ -36,8 +34,8 @@ data = pd.read_csv('assets/arbres-publics.csv')
 
 data = preprocess.removeOutliers(data)
 data = preprocess.preprocess_df(data)
-species = preprocess.getSpeciesList(data)
 
+species = preprocess.getSpeciesList(data)
 locations = preprocess.get_neighborhoods(montreal_data)
 
 date_plantation_min = data['Date_plantation'].min()
@@ -47,7 +45,6 @@ dhp_min = data['DHP'].min()
 dhp_max = data['DHP'].max()
 
 arrondissement = 'Le Plateau-Mont-Royal'
-especes = sorted(data['Essence_fr'].unique())
 
 nb_arbres_arrondissement = preprocess.get_nb_trees_district(data, date_plantation_min, date_plantation_max, dhp_min, dhp_max)
 missing_arrondissement = preprocess.get_missing_districts(nb_arbres_arrondissement, locations)
@@ -58,7 +55,7 @@ carte_arrond = arrond_map.getMap(data, arrondissement, 'Date_plantation', (None,
 bar_chart_ville = bar_chart.draw_bar_chart(data, None, 'Rue', True)
 bar_chart_arrond = bar_chart.draw_bar_chart(data, arrondissement, 'Rue', True)
 
-swarm = swarmplot.swarm(data)
+swarm, especes = swarmplot.swarm(data)
 swarm_plot = swarmplot.swarmPlot(swarm)
 
 app.layout = html.Div(className='content', children=[
@@ -72,6 +69,7 @@ app.layout = html.Div(className='content', children=[
                     options=species,
                     placeholder='Espèces',
                     multi=True,
+                    style={"margin-top" : "3px"}
                 ),
                 html.Div(id='date', children=[
                     html.H6('Date de plantation'),
@@ -107,8 +105,6 @@ app.layout = html.Div(className='content', children=[
                         },
                     ),
                 ])
-                
-                
             ]),
             
             html.Div(id='total', children=[
@@ -125,7 +121,8 @@ app.layout = html.Div(className='content', children=[
                         style={"margin" : "10px", "width": "50%"},),
                         dcc.Graph(figure=choropleth_fig, id='choropleth',
                             config=dict(
-                            scrollZoom=False, displayModeBar=False))       
+                            scrollZoom=False, displayModeBar=False),
+                            style={"height" : "472px"})       
             ]),
 
             html.Div(id='arrond', children=[
@@ -144,7 +141,8 @@ app.layout = html.Div(className='content', children=[
                         style={"margin" : "10px", "width": "50%"},),
                         dcc.Graph(figure=carte_arrond, id='carte_arrond',
                             config=dict(
-                            scrollZoom=True, displayModeBar=False))       
+                            scrollZoom=True, displayModeBar=False),
+                            style={"height" : "472px"})       
             ]),
         ]),
         html.Div(id='barCharts', children=[
@@ -187,7 +185,7 @@ app.layout = html.Div(className='content', children=[
         html.Div(id='swarm', children=[
                     dcc.Dropdown(id='espece_swarm',
                             options=especes,
-                            placeholder='Trouver une espèce',
+                            placeholder='Trouver une espèce d\'arbre',
                             multi=False,
                             searchable=True,
                             clearable=True),
@@ -202,29 +200,27 @@ app.layout = html.Div(className='content', children=[
 
                     html.Div(id='swarm_legend',
                     style={'display': 'flex'}, children=[
-                        html.P('La taille des bulles correspond au diamètre du tronc moyen de l\'espèce : '),
+                        html.P([html.Strong('La taille des bulles'), ' correspond au diamètre du tronc moyen de l\'espèce : ']),
                         html.Div(id='bulle5', children=[
                             html.Div(style={'width': 10, 'height': 10,'border':'1px solid', 'border-radius': 5, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
-                            html.P("5cm"),
+                            html.P("15cm"),
                         ]),
 
                         html.Div(id='bulle10', children=[
                             html.Div(style={'width': 20, 'height': 20,'border':'1px solid', 'border-radius': 10, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
-                            html.P("10cm"),
+                            html.P("30cm"),
                         ]),
 
                         html.Div(id='bulle20', children=[
                             html.Div(style={'width': 30, 'height': 30,'border':'1px solid', 'border-radius': 15, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
-                            html.P("20cm"),
+                            html.P("45cm"),
                             
                         ]),
 
                         html.Div(id='bulle30', children=[
-                            html.Div(style={'width': 50, 'height': 50,'border':'1px solid', 'border-radius': 25, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
-                            html.P("30cm"),
+                            html.Div(style={'width': 40, 'height': 40,'border':'1px solid', 'border-radius': 20, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.P("60cm"),
                         ])
-                        
-                        
                     ])       
         ])
     ])

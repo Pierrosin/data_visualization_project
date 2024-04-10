@@ -38,7 +38,7 @@ def removeOutliers(df):
     # clean = df[df['COTE'].isin(['N', 'S', 'E', 'O', 'I', 'P'])]
     clean = df
     clean = clean[(clean['Coord_X'] > 270000) & (clean['Coord_X'] < 310000) & (clean['Coord_Y'] > 5030000) & (clean['Coord_Y'] < 5070000)]
-    clean = clean.dropna(subset=['SIGLE', 'Essence_latin', 'Essence_fr', 'ESSENCE_ANG', 'ARROND', 'ARROND_NOM', 'Rue'])
+    clean = clean.dropna(subset=['Essence_fr', 'ARROND_NOM', 'Rue', 'Emplacement', 'DHP'])
     clean = clean[clean['DHP'] < 300]
     clean['Date_plantation'] = pd.to_datetime(clean['Date_plantation'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
     clean = clean[(clean['Date_plantation'].dt.year > 1800) & (clean['Date_plantation'].dt.year < 2024)]
@@ -48,11 +48,10 @@ def removeOutliers(df):
     clean = clean.dropna(subset=['Date_releve'])
     clean = clean[(clean['Longitude'] > -74) & (clean['Longitude'] < -73) & (clean['Latitude'] > 45) & (clean['Latitude'] < 46)]
     
-
     return clean
 
 def getSpeciesList(df):
-    return pd.unique(df['Essence_fr'])
+    return sorted(pd.unique(df['Essence_fr']))
 
 
 def get_neighborhoods(montreal_data):

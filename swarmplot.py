@@ -36,14 +36,16 @@ def swarm(data):
     swarm = swarm[(swarm['growth'] > 0) & (swarm['growth'] < 5)]
     maxDHP = swarm['dhp'].max()
     swarm = swarm[swarm['dhp'] > maxDHP/10]
-    return swarm
+    species = sorted(swarm['specie'])
+    
+    return swarm, species
 
 
-def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.5, color='#36749d', seed=0):
+def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.5, color='#36749d', seed=1):
     np.random.seed(seed)
     swarm = swarm.sort_values('dhp', ascending=False)
     x = swarm['growth'].to_numpy()
-    size = swarm['dhp'].to_numpy()/30
+    size = swarm['dhp'].to_numpy()/25
     
     if highlight_specie:
         colors = swarm['specie'].apply(lambda x: color if x == highlight_specie else 'lightgray')
