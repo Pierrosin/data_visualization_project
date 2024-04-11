@@ -89,7 +89,7 @@ app.layout = html.Div(className='content', children=[
                     ),
                 ]),
                 html.Div(id='diametre', children=[
-                    html.H6('Diamètre du tronc'),
+                    html.H6('Diamètre du tronc (cm)'),
                     dcc.RangeSlider(
                         id='diametreSlider', className='slider',
                         min=0,
@@ -202,23 +202,23 @@ app.layout = html.Div(className='content', children=[
                     style={'display': 'flex'}, children=[
                         html.P([html.Strong('La taille des bulles'), ' correspond au diamètre du tronc moyen de l\'espèce : ']),
                         html.Div(id='bulle5', children=[
-                            html.Div(style={'width': 10, 'height': 10,'border':'1px solid', 'border-radius': 5, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.Div(style={'width': 10, 'height': 10,'border':'1px solid', 'border-radius': 5, 'backgroundColor':'lightgray', 'margin':'auto'}),
                             html.P("15cm"),
                         ]),
 
                         html.Div(id='bulle10', children=[
-                            html.Div(style={'width': 20, 'height': 20,'border':'1px solid', 'border-radius': 10, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.Div(style={'width': 20, 'height': 20,'border':'1px solid', 'border-radius': 10, 'backgroundColor':'lightgray', 'margin':'auto'}),
                             html.P("30cm"),
                         ]),
 
                         html.Div(id='bulle20', children=[
-                            html.Div(style={'width': 30, 'height': 30,'border':'1px solid', 'border-radius': 15, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.Div(style={'width': 30, 'height': 30,'border':'1px solid', 'border-radius': 15, 'backgroundColor':'lightgray', 'margin':'auto'}),
                             html.P("45cm"),
                             
                         ]),
 
                         html.Div(id='bulle30', children=[
-                            html.Div(style={'width': 40, 'height': 40,'border':'1px solid', 'border-radius': 20, 'backgroundColor':'#FFFFFF', 'margin':'auto'}),
+                            html.Div(style={'width': 40, 'height': 40,'border':'1px solid', 'border-radius': 20, 'backgroundColor':'lightgray', 'margin':'auto'}),
                             html.P("60cm"),
                         ])
                     ])       
