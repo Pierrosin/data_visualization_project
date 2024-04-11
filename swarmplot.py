@@ -46,6 +46,7 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
     swarm = swarm.sort_values('dhp', ascending=False)
     x = swarm['growth'].to_numpy()
     size = swarm['dhp'].to_numpy()/25
+    mean_growth = swarm['growth'].mean()
     
     if highlight_specie:
         colors = swarm['specie'].apply(lambda x: color if x == highlight_specie else 'lightgray')
@@ -115,5 +116,9 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
     ))
 
     fig.update_xaxes(title="Vitesse moyenne de croissance du tronc (cm/an)", dtick=0.5, side='top')
+    
+    fig.add_vline(x=mean_growth, line_width=2, line_dash="dash", line_color="black", \
+                  annotation_text=f'<b>Moyenne globale</b> : <b>{round(mean_growth, 2)} cm/an</b>',\
+                  annotation_position='top right')
     
     return fig
