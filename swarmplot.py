@@ -47,7 +47,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
     
     colors = swarm['specie'].apply(lambda x: color)
     
-    ratio = figSize[0]*(ymax-ymin)/(figSize[1]*(xmax-xmin))
+    ratio = figSize[0]*(ymax-ymin)/((figSize[1]-45)*(xmax-xmin))
     
     def isInEllipse(x, y, x0, y0, r1, r2):
         return ((x-x0)/r1)**2 + ((y-y0)/r2)**2 <= 1

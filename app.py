@@ -45,7 +45,7 @@ dhp_min = data['DHP'].min()
 dhp_max = data['DHP'].max()
 
 arrondissement = 'Le Plateau-Mont-Royal'
-arrondissements = list(pd.unique(data['ARROND_NOM']))
+arrondissements = sorted(pd.unique(data['ARROND_NOM']))
 
 nb_arbres_arrondissement = preprocess.get_nb_trees_district(data, date_plantation_min, date_plantation_max, dhp_min, dhp_max)
 missing_arrondissement = preprocess.get_missing_districts(nb_arbres_arrondissement, locations)
@@ -60,13 +60,13 @@ swarm_plot, especes, swarm = swarmplot.swarm(data)
 
 app.layout = html.Div(className='content', children=[
     html.Header(children=[
-        html.H1('Les arbres de la Ville de Montréal'),
+        html.H1(html.Strong('Les arbres de la Ville de Montréal')),
     ]),
     html.Main(className='viz-container', children=[
         html.Div(id='maps', children=[
             html.Div(id='filter', children=[
                 html.Div(id='text_filter', children=[
-                    html.P(html.Strong('Filtrer par :'))
+                    html.P('Filtrer par :')
                 ]),
                 dcc.Dropdown(id='specie',
                     options=species,
@@ -111,8 +111,13 @@ app.layout = html.Div(className='content', children=[
             ]),
             
             html.Div(id='total', children=[
-                        # Div du choroplethe
+                        dcc.Graph(figure=choropleth_fig, id='choropleth',
+                            config=dict(
+                            scrollZoom=False, displayModeBar=False)),              
                         html.Div(id='div_critere_choropleth', children=[
+                            html.Div(id='text_critere_choropleth', children=[
+                                html.P('Critère d\'échelle :')
+                            ]),
                             dcc.Dropdown(id='critere_choropleth',
                                 options=["Nombre d'arbres", "Densité d'arbres"],
                                 value="Nombre d'arbres",
@@ -121,16 +126,17 @@ app.layout = html.Div(className='content', children=[
                                 searchable=False,
                                 clearable=False)
                         ],
-                        style={"margin" : "10px", "width": "50%"},),
-                        dcc.Graph(figure=choropleth_fig, id='choropleth',
-                            config=dict(
-                            scrollZoom=False, displayModeBar=False),
-                            style={"height" : "472px"})       
+                        style={"margin" : "10px", "width": "47%", "height": "36px"},)    
             ]),
 
             html.Div(id='arrond', children=[
-                        # Div de la carte de l'arrondissement
+                        dcc.Graph(figure=carte_arrond, id='carte_arrond',
+                            config=dict(
+                            scrollZoom=True, displayModeBar=False)),
                         html.Div(id='div_critere_carte_arrond', children=[
+                            html.Div(id='text_critere_carte_arrond', children=[
+                                html.P('Critère d\'échelle :')
+                            ]),
                             dcc.Dropdown(id='critere_carte_arrond',
                                 options={"Date_plantation": "Date de plantation",
                                          "Date_releve": "Date de relevé",
@@ -140,6 +146,9 @@ app.layout = html.Div(className='content', children=[
                                 multi=False,
                                 searchable=False,
                                 clearable=False),
+                            html.Div(id='text_arr_carte_arrond', children=[
+                                html.P('Arrondissement :')
+                            ]),
                             dcc.Dropdown(id='arr_carte_arrond',
                                 options=arrondissements,
                                 value="Le Plateau-Mont-Royal",
@@ -147,16 +156,18 @@ app.layout = html.Div(className='content', children=[
                                 searchable=False,
                                 clearable=False)
                         ],
-                        style={"margin" : "10px", "width": "50%", "height": "36px"},),
-                        dcc.Graph(figure=carte_arrond, id='carte_arrond',
-                            config=dict(
-                            scrollZoom=True, displayModeBar=False),
-                            style={"height" : "472px"})       
+                        style={"margin" : "10px", "width": "50%", "height": "36px"},)     
             ]),
         ]),
         html.Div(id='barCharts', children=[
             html.Div(id='divBarChartVille', children=[
+                        dcc.Graph(figure=bar_chart_ville, id='barChartVille',
+                            config=dict(
+                            scrollZoom=False, displayModeBar=False)),
                         html.Div(id='div_critere_bar_chart_ville', children=[
+                            html.Div(id='text_critere_bar_chart_ville', children=[
+                                html.P('Critère classement :')
+                            ]),
                             dcc.Dropdown(id='critere_bar_chart_ville',
                                 options={"Rue": "Rues",
                                          "Emplacement": "Emplacements",
@@ -167,14 +178,17 @@ app.layout = html.Div(className='content', children=[
                                 searchable=False,
                                 clearable=False)
                         ],
-                        style={"margin" : "10px", "width": "50%"},),
-                        dcc.Graph(figure=bar_chart_ville, id='barChartVille',
-                            config=dict(
-                            scrollZoom=False, displayModeBar=False))       
+                        style={"margin" : "10px", "width": "47%", "height": "36px"},)       
             ]),
 
             html.Div(id='DivBarChartArrond', children=[
+                        dcc.Graph(figure=bar_chart_arrond, id='barChartArrond',
+                            config=dict(
+                            scrollZoom=False, displayModeBar=False)),
                         html.Div(id='div_critere_bar_chart_arrond', children=[
+                            html.Div(id='text_critere_bar_chart_arrond', children=[
+                                html.P('Critère classement :')
+                            ]),
                             dcc.Dropdown(id='critere_bar_chart_arrond',
                                 options={"Rue": "Rues",
                                          "Emplacement": "Emplacements",
@@ -184,6 +198,9 @@ app.layout = html.Div(className='content', children=[
                                 multi=False,
                                 searchable=False,
                                 clearable=False),
+                            html.Div(id='text_arr_bar_chart_arrond', children=[
+                                html.P('Arrondissement :')
+                            ]),
                             dcc.Dropdown(id='arr_bar_chart_arrond',
                                 options=arrondissements,
                                 value="Le Plateau-Mont-Royal",
@@ -191,10 +208,7 @@ app.layout = html.Div(className='content', children=[
                                 searchable=False,
                                 clearable=False)
                         ],
-                        style={"margin" : "10px", "width": "50%", "height": "36px"},),
-                        dcc.Graph(figure=bar_chart_arrond, id='barChartArrond',
-                            config=dict(
-                            scrollZoom=False, displayModeBar=False))       
+                        style={"margin" : "10px", "width": "50%", "height": "36px"},), 
             ]),
         ]),
         html.Div(id='swarm', children=[
@@ -237,6 +251,11 @@ app.layout = html.Div(className='content', children=[
                             html.P("60cm"),
                         ])
                     ])       
+        ]),
+        html.Div(id='methodologie', children=[
+            html.P(['Les données sur les arbres du domaine public proviennent du site de la ',
+                html.A('Ville de Montréal', href='https://donnees.montreal.ca/dataset/arbres?fbclid=IwAR0kXb318EgUdmDej3XoGVQymQsm_LXBjw-vmkqHNtw37sqwzh1Paqn1iRY', target='_blank'), '.']),
+            html.P('Un prétraitement a été effectué sur les données afin de ne garder que les arbres ayant leurs attributs valides (dates, espèce, diamètre du tronc...).')
         ])
     ])
 ])
