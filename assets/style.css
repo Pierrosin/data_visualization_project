@@ -62,7 +62,7 @@ h6 {
 
 #filter{ 
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(160, 160, 160) 2px;
     left:0;
     top: 0;
     width:100%;
@@ -75,7 +75,7 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(160, 160, 160) 2px;
     border-right: none;
 }
 #arrond{ 
@@ -84,14 +84,22 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(160, 160, 160) 2px;
+}
+
+#text_filter{
+    position:absolute;
+    width:20%;
+    height:60%;
+    left:2%;
+    top:10%;
 }
 
 #specie{
     position:absolute;
     width:20%;
     height:60%;
-    left:10%;
+    left:12%;
     top:10%;
 }
 
@@ -116,7 +124,7 @@ h6 {
     height: 550px;;
     width:98%;
     left:1%;
-    top: 680px;
+    top: 690px;
 }
 
 #divBarChartVille{ 
@@ -125,7 +133,7 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(160, 160, 160) 2px;
     border-right: none;
 }
 #DivBarChartArrond{ 
@@ -134,7 +142,7 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px
+    border: solid rgb(160, 160, 160) 2px
 }
 
 #swarm{
@@ -142,8 +150,8 @@ h6 {
     height: 680px;
     width:98%;
     left:1%;
-    top: 1235px;
-    border: solid rgb(120, 120, 120) 2px;
+    top: 1255px;
+    border: solid rgb(160, 160, 160) 2px;
     margin-bottom: 100px;
 }
 

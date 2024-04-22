@@ -65,6 +65,9 @@ app.layout = html.Div(className='content', children=[
     html.Main(className='viz-container', children=[
         html.Div(id='maps', children=[
             html.Div(id='filter', children=[
+                html.Div(id='text_filter', children=[
+                    html.P(html.Strong('Filtrer par :'))
+                ]),
                 dcc.Dropdown(id='specie',
                     options=species,
                     placeholder='Espèces',
@@ -230,7 +233,6 @@ app.layout = html.Div(className='content', children=[
 @app.callback(
     Output('choropleth', 'figure'),
     Output('carte_arrond', 'figure'),
-    Output('barChartVille', 'figure'),
     Output('barChartArrond', 'figure'),
     Input('choropleth', 'clickData'),
     Input('critere_choropleth', 'value'),
@@ -238,11 +240,10 @@ app.layout = html.Div(className='content', children=[
     Input('dateSlider', 'value'),
     Input('diametreSlider', 'value'),
     Input('specie', 'value'),
-    Input('critere_bar_chart_ville', 'value'),
     Input('critere_bar_chart_arrond', 'value'),
     prevent_initial_call=True
 )
-def update_maps(clickData, critere_choropleth, critere_carte_arrond, date_range, dhp_range, species, critere_bar_chart_ville, critere_bar_chart_arrond):
+def update_maps(clickData, critere_choropleth, critere_carte_arrond, date_range, dhp_range, species, critere_bar_chart_arrond):
     global arrondissement
     
     densite = critere_choropleth == "Densité d'arbres"
@@ -261,10 +262,20 @@ def update_maps(clickData, critere_choropleth, critere_carte_arrond, date_range,
                 
     arrond_map_updated = arrond_map.getMap(data, arrondissement, critere_carte_arrond, (species, pd.to_datetime(str(date_range[0]), format='%Y'), pd.to_datetime(str(date_range[1] + 1), format='%Y'), dhp_range[0], dhp_range[1]))
     
-    bar_chart_ville_updated = bar_chart.draw_bar_chart(data, None, critere_bar_chart_ville, True)
     bar_chart_arrond_updated = bar_chart.draw_bar_chart(data, arrondissement, critere_bar_chart_arrond, True)
     
-    return choropleth_updated, arrond_map_updated, bar_chart_ville_updated, bar_chart_arrond_updated
+    return choropleth_updated, arrond_map_updated, bar_chart_arrond_updated
+
+
+@app.callback(
+    Output('barChartVille', 'figure'),
+    Input('critere_bar_chart_ville', 'value'),
+    prevent_initial_call=True
+)
+def update_maps(critere_bar_chart_ville):
+    bar_chart_ville_updated = bar_chart.draw_bar_chart(data, None, critere_bar_chart_ville, True)
+    
+    return bar_chart_ville_updated
 
 
 @app.callback(

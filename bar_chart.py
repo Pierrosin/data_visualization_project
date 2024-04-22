@@ -10,10 +10,10 @@ def draw_bar_chart(data, arrond, criterion, top):
     
     if arrond:
         data = data[data['ARROND_NOM'] == arrond]
-        title = f"Top 10 {pretty_criterion.lower()} de l'arrondissement {arrond}"
+        title = f"<b>Top 10 {pretty_criterion.lower()} de l'arrondissement {arrond}</b>"
         
     else:
-        title = f"Top 10 {pretty_criterion.lower()} de la Ville de Montréal"
+        title = f"<b>Top 10 {pretty_criterion.lower()} de la Ville de Montréal</b>"
         
     tree_counts = data.groupby(criterion).size().reset_index(name='Count')
     

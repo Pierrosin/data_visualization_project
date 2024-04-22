@@ -115,7 +115,11 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
                       ) + "<extra></extra>"
     ))
 
-    fig.update_xaxes(title="Vitesse moyenne de croissance du tronc (cm/an)", dtick=0.5, side='top')
+    fig.update_xaxes(title={'text': "<b>Vitesse moyenne de croissance du tronc (cm/an)</b>",
+                            'font': dict(
+                                size=17,
+                                )},
+                        dtick=0.5, side='top')
     
     fig.add_vline(x=mean_growth, line_width=2, line_dash="dash", line_color="black", \
                   annotation_text=f'<b>Moyenne globale</b> : <b>{round(mean_growth, 2)} cm/an</b>',\
