@@ -119,6 +119,17 @@ h6 {
     top:5%;
 }
 
+#critere_carte_arrond{
+    position:absolute;
+    width:47%;
+}
+
+#arr_carte_arrond{
+    position:absolute;
+    width:47%;
+    left:51%;
+}
+
 #barCharts{
     position:absolute;
     height: 550px;;
@@ -143,6 +154,17 @@ h6 {
     height:92.54%;
     position:absolute;
     border: solid rgb(160, 160, 160) 2px
+}
+
+#critere_bar_chart_arrond{
+    position:absolute;
+    width:47%;
+}
+
+#arr_bar_chart_arrond{
+    position:absolute;
+    width:47%;
+    left:51%;
 }
 
 #swarm{

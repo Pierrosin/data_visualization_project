@@ -45,6 +45,7 @@ dhp_min = data['DHP'].min()
 dhp_max = data['DHP'].max()
 
 arrondissement = 'Le Plateau-Mont-Royal'
+arrondissements = list(pd.unique(data['ARROND_NOM']))
 
 nb_arbres_arrondissement = preprocess.get_nb_trees_district(data, date_plantation_min, date_plantation_max, dhp_min, dhp_max)
 missing_arrondissement = preprocess.get_missing_districts(nb_arbres_arrondissement, locations)
@@ -55,8 +56,7 @@ carte_arrond = arrond_map.getMap(data, arrondissement, 'Date_plantation', (None,
 bar_chart_ville = bar_chart.draw_bar_chart(data, None, 'Rue', True)
 bar_chart_arrond = bar_chart.draw_bar_chart(data, arrondissement, 'Rue', True)
 
-swarm, especes = swarmplot.swarm(data)
-swarm_plot = swarmplot.swarmPlot(swarm)
+swarm_plot, especes, swarm = swarmplot.swarm(data)
 
 app.layout = html.Div(className='content', children=[
     html.Header(children=[
@@ -139,9 +139,15 @@ app.layout = html.Div(className='content', children=[
                                 placeholder='Critère',
                                 multi=False,
                                 searchable=False,
+                                clearable=False),
+                            dcc.Dropdown(id='arr_carte_arrond',
+                                options=arrondissements,
+                                value="Le Plateau-Mont-Royal",
+                                multi=False,
+                                searchable=False,
                                 clearable=False)
                         ],
-                        style={"margin" : "10px", "width": "50%"},),
+                        style={"margin" : "10px", "width": "50%", "height": "36px"},),
                         dcc.Graph(figure=carte_arrond, id='carte_arrond',
                             config=dict(
                             scrollZoom=True, displayModeBar=False),
@@ -177,9 +183,15 @@ app.layout = html.Div(className='content', children=[
                                 placeholder='Critère',
                                 multi=False,
                                 searchable=False,
+                                clearable=False),
+                            dcc.Dropdown(id='arr_bar_chart_arrond',
+                                options=arrondissements,
+                                value="Le Plateau-Mont-Royal",
+                                multi=False,
+                                searchable=False,
                                 clearable=False)
                         ],
-                        style={"margin" : "10px", "width": "50%"},),
+                        style={"margin" : "10px", "width": "50%", "height": "36px"},),
                         dcc.Graph(figure=bar_chart_arrond, id='barChartArrond',
                             config=dict(
                             scrollZoom=False, displayModeBar=False))       
@@ -232,20 +244,13 @@ app.layout = html.Div(className='content', children=[
 
 @app.callback(
     Output('choropleth', 'figure'),
-    Output('carte_arrond', 'figure'),
-    Output('barChartArrond', 'figure'),
-    Input('choropleth', 'clickData'),
     Input('critere_choropleth', 'value'),
-    Input('critere_carte_arrond', 'value'),
     Input('dateSlider', 'value'),
     Input('diametreSlider', 'value'),
     Input('specie', 'value'),
-    Input('critere_bar_chart_arrond', 'value'),
     prevent_initial_call=True
 )
-def update_maps(clickData, critere_choropleth, critere_carte_arrond, date_range, dhp_range, species, critere_bar_chart_arrond):
-    global arrondissement
-    
+def update_maps(critere_choropleth, date_range, dhp_range, species):
     densite = critere_choropleth == "Densité d'arbres"
     nb_arbres_arrondissement = preprocess.get_nb_trees_district(data, pd.to_datetime(str(date_range[0]), format='%Y'), \
                                                                 pd.to_datetime(str(date_range[1] + 1), format='%Y'), \
@@ -253,18 +258,23 @@ def update_maps(clickData, critere_choropleth, critere_carte_arrond, date_range,
     missing_arrondissement = preprocess.get_missing_districts(nb_arbres_arrondissement, locations)
     data_arrondissement = preprocess.add_density(nb_arbres_arrondissement, 'assets/montreal.json')
     choropleth_updated = choropleth.get_choropleth(data_arrondissement, missing_arrondissement, montreal_data, densite=densite)
-        
-    ctx = dash.callback_context
-    trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+                        
+    return choropleth_updated
 
-    if trigger_id == 'choropleth' and clickData is not None:
-        arrondissement = clickData['points'][0]['location']
-                
-    arrond_map_updated = arrond_map.getMap(data, arrondissement, critere_carte_arrond, (species, pd.to_datetime(str(date_range[0]), format='%Y'), pd.to_datetime(str(date_range[1] + 1), format='%Y'), dhp_range[0], dhp_range[1]))
-    
-    bar_chart_arrond_updated = bar_chart.draw_bar_chart(data, arrondissement, critere_bar_chart_arrond, True)
-    
-    return choropleth_updated, arrond_map_updated, bar_chart_arrond_updated
+
+@app.callback(
+    Output('carte_arrond', 'figure'),
+    Input('critere_carte_arrond', 'value'),
+    Input('arr_carte_arrond', 'value'),
+    Input('dateSlider', 'value'),
+    Input('diametreSlider', 'value'),
+    Input('specie', 'value'),
+    prevent_initial_call=True
+)
+def update_maps(critere_carte_arrond, arr_carte_arrond, date_range, dhp_range, species):           
+    arrond_map_updated = arrond_map.getMap(data, arr_carte_arrond, critere_carte_arrond, (species, pd.to_datetime(str(date_range[0]), format='%Y'), pd.to_datetime(str(date_range[1] + 1), format='%Y'), dhp_range[0], dhp_range[1]))
+        
+    return arrond_map_updated
 
 
 @app.callback(
@@ -279,12 +289,24 @@ def update_maps(critere_bar_chart_ville):
 
 
 @app.callback(
+    Output('barChartArrond', 'figure'),
+    Input('arr_bar_chart_arrond', 'value'),
+    Input('critere_bar_chart_arrond', 'value'),
+    prevent_initial_call=True
+)
+def update_maps(arr_bar_chart_arrond, critere_bar_chart_arrond):
+    bar_chart_arrond_updated = bar_chart.draw_bar_chart(data, arr_bar_chart_arrond, critere_bar_chart_arrond, True)
+    
+    return bar_chart_arrond_updated
+
+
+@app.callback(
     Output('swarm_plot', 'figure'),
     Input('espece_swarm', 'value'),
     prevent_initial_call=True
 )
 def update_swarm(espece_swarm):
-    swarm_plot_updated = swarmplot.swarmPlot(swarm, espece_swarm)
+    swarm_plot_updated = swarmplot.swarmPlot(swarm_plot, swarm, espece_swarm)
     
     return swarm_plot_updated
 
