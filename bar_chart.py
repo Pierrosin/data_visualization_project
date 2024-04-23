@@ -11,6 +11,9 @@ def draw_bar_chart(data, arrond, criterion, top):
     if arrond:
         data = data[data['ARROND_NOM'] == arrond]
         title = f"<b>Top 10 {pretty_criterion.lower()} de l'arrondissement {arrond}</b>"
+        if len(title) > 65:
+            title = f"<b>Top 10 {pretty_criterion.lower()} de l'arrondissement<br>{arrond}</b>"
+
         
     else:
         title = f"<b>Top 10 {pretty_criterion.lower()} de la Ville de Montréal</b>"
@@ -37,6 +40,11 @@ def draw_bar_chart(data, arrond, criterion, top):
         showlegend=False,
         dragmode=False
     )
+    
+    if arrond:
+        fig.update_layout(
+            title_y=0.96,
+        )
     
     fig.update_traces(hovertemplate='%{x}')
 

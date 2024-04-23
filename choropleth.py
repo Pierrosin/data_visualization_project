@@ -36,7 +36,10 @@ def get_choropleth(data_arrondissement, missing_data, montreal_data, densite=Fal
     for trace in missing_areas.data:
         trace.hovertemplate = choropleth_hovertemplate_no_data()
         fig.add_trace(trace)
-
+        
+    fig.update_traces(
+        marker_line_width = 0.5
+    )
 
     fig.update_layout(
         title="<b>Vue de la Ville de Montréal</b>",

@@ -107,7 +107,8 @@ app.layout = html.Div(className='content', children=[
                             "style": {"color": "LightSteelBlue", "fontSize": "15px"},
                         },
                     ),
-                ])
+                ]),
+                html.Button(id='btn_info', n_clicks=0, children='?')
             ]),
             
             html.Div(id='total', children=[
@@ -207,8 +208,9 @@ app.layout = html.Div(className='content', children=[
                                 multi=False,
                                 searchable=False,
                                 clearable=False)
-                        ],
-                        style={"margin" : "10px", "width": "50%", "height": "36px"},), 
+                            ],
+                            style={"margin" : "10px", "width": "50%", "height": "36px"},),
+                        html.Button(id='btn_info_2', n_clicks=0, children='?')
             ]),
         ]),
         html.Div(id='swarm', children=[
@@ -218,6 +220,8 @@ app.layout = html.Div(className='content', children=[
                             multi=False,
                             searchable=True,
                             clearable=True),
+                    
+                    html.Button(id='btn_info_3', n_clicks=0, children='?'),
                     
                     html.Div(id='texte_especes_arbres', style={'display': 'flex', 'justify-content': 'flex-end', 'align-items': 'center', "fontSize": "10px"}, children=[
                         html.H2("Espèces\nd'arbres")
@@ -256,10 +260,55 @@ app.layout = html.Div(className='content', children=[
             html.P(['Les données sur les arbres du domaine public proviennent du site de la ',
                 html.A('Ville de Montréal', href='https://donnees.montreal.ca/dataset/arbres?fbclid=IwAR0kXb318EgUdmDej3XoGVQymQsm_LXBjw-vmkqHNtw37sqwzh1Paqn1iRY', target='_blank'), '.']),
             html.P('Un prétraitement a été effectué sur les données afin de ne garder que les arbres ayant leurs attributs valides (dates, espèce, diamètre du tronc...).')
-        ])
+        ]),
+        html.Div(id='info_tooltip', style={'display': 'none'}, children=[
+            html.P("Ces deux cartes représentent l'ensemble des arbres du domaine public de la Ville de Montréal."),
+            html.P("La carte de gauche affiche chaque arrondissement de Montréal. Quand on passe la souris sur un arrondissement, les informations sur les arbres associées à cet arrondissement apparaissent."),
+            html.P("La carte de droite affiche les arbres présents dans l'arrondissement sélectionné. Chaque point représente un arbre et quand on passe la souris sur un point, les informations associées à l'arbre apparaissent."),
+            html.P("Vous pouvez filtrer les arbres de ces deux cartes selon l'espèce, la date de plantation et le diamètre du tronc.")
+        ]),
+        html.Div(id='info_tooltip_2', style={'display': 'none'}, children=[
+            html.P("Ces deux graphiques représentent les classements des dix rues, emplacements ou espèces ayant le plus d'arbres selon le critère sélectionné."),
+            html.P("Le graphique de gauche considère tous les arbres de la Ville de Montréal, peu importe dans quel arrondissement ils se situent."),
+            html.P("Le graphique de droite considère uniquement les arbres présents dans l'arrondissement sélectionné. En particulier, pour le classement des rues, on comptabilise pour chaque rue uniquement les arbres présents dans l'arrondissement sélectionné.")
+        ]),
+        html.Div(id='info_tooltip_3', style={'display': 'none'}, children=[
+            html.P("Ce graphique représente la vitesse moyenne de croissance du tronc et le diamètre moyen du tronc de chaque espèce d'arbre de la Ville de Montréal."),
+            html.P("Chaque bulle correspond à une espèce d'arbre, sa position le long de l'axe des abscisses correspond à sa vitesse moyenne de croissance du tronc et sa taille correspond au diamètre de son tronc."),
+            html.P("Vous pouvez mettre en évidence une espèce d'arbre grâce à l'outil de recherche.")
+        ]),
     ])
 ])
 
+@app.callback(
+    Output('info_tooltip', 'style'),
+    [Input('btn_info', 'n_clicks')]
+)
+def toggle_tooltip(n_clicks):
+    if n_clicks % 2 == 0:
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
+    
+@app.callback(
+    Output('info_tooltip_2', 'style'),
+    [Input('btn_info_2', 'n_clicks')]
+)
+def toggle_tooltip(n_clicks):
+    if n_clicks % 2 == 0:
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
+    
+@app.callback(
+    Output('info_tooltip_3', 'style'),
+    [Input('btn_info_3', 'n_clicks')]
+)
+def toggle_tooltip(n_clicks):
+    if n_clicks % 2 == 0:
+        return {'display': 'none'}
+    else:
+        return {'display': 'block'}
 
 @app.callback(
     Output('choropleth', 'figure'),
