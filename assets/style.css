@@ -24,7 +24,6 @@ main {
     flex-direction: column;
     justify-content: space-between;
     height: 100vh;
-    /* padding-bottom: 81%;  */
 }
 
 .viz-container {
@@ -62,6 +61,8 @@ h6 {
 #filter{ 
     position:absolute;
     border: solid rgb(200, 200, 200) 2px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     left:0;
     top: 0;
     width:100%;
@@ -69,13 +70,13 @@ h6 {
     border-bottom: none;
 }
 #total{ 
-    
     left:0;
     top: 11%;
     width:50%;
     height:92.54%;
     position:absolute;
     border: solid rgb(200, 200, 200) 2px;
+    border-bottom-left-radius: 15px;
     border-right: none;
 }
 #arrond{ 
@@ -85,6 +86,7 @@ h6 {
     height:92.54%;
     position:absolute;
     border: solid rgb(200, 200, 200) 2px;
+    border-bottom-right-radius: 15px;
 }
 
 #text_filter{
@@ -140,7 +142,7 @@ h6 {
 
 #critere_choropleth{
     position:absolute;
-    width:170px;
+    width:180px;
     left:150px;
     top:13px;
 }
@@ -166,7 +168,7 @@ h6 {
 
 #critere_carte_arrond{
     position:absolute;
-    width:170px;
+    width:180px;
     left:150px;
     top:13px;
 }
@@ -200,6 +202,8 @@ h6 {
     height:92.54%;
     position:absolute;
     border: solid rgb(200, 200, 200) 2px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
     border-right: none;
 }
 #DivBarChartArrond{ 
@@ -208,7 +212,9 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(200, 200, 200) 2px
+    border: solid rgb(200, 200, 200) 2px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 #barChartArrond{
@@ -242,7 +248,7 @@ h6 {
 
 #critere_bar_chart_ville{
     position:absolute;
-    width:150px;
+    width:160px;
     left:167px;
     top:13px;
 }
@@ -256,7 +262,7 @@ h6 {
 
 #critere_bar_chart_arrond{
     position:absolute;
-    width:150px;
+    width:160px;
     left:167px;
     top:13px;
 }
@@ -282,27 +288,23 @@ h6 {
     left:1%;
     top: 1255px;
     border: solid rgb(200, 200, 200) 2px;
+    border-radius: 15px;
     margin-bottom: 100px;
 }
 
 #espece_swarm{
     position:absolute;
-    /* height:10%; */
-    width:300px;
-    /* left:1%; */
+    width:310px;
     margin-top: 20px;
     margin-left: 27px;
-    /* top:1%; */
-    /* border: solid black 1px */
 }
 
 #texte_especes_arbres{
     position:absolute;
-    height:80%;
+    height:300px;
     width:65px;
-    left:15px;
-    top:10%;
-    /* border: solid black 1px */
+    left:18px;
+    top:185px;
 }
 
 #swarm_plot{
@@ -311,61 +313,38 @@ h6 {
     width:88%;
     left:80px;
     top:10%;
-    /* border: solid black 1px */
 }
 
 #swarm_legend{
     position:absolute;
     height:10%;
     width:80%;
-    left:10%;
+    left:15.5%;
     top:85%;
-    /* border: solid black 1px */
 }
 
 #bulle5{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:40%;
-    /* top:85%; */
-    /* border: solid black 1px */
-}
-
-#bulle5{
-    position:absolute;
-    /* height:10%; */
-    /* width:80%; */
     left:50%;
     top:20px;
-    /* border: solid black 1px */
 }
 
 #bulle10{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:60%;
+    left:61%;
     top:15px;
-    /* border: solid black 1px */
 }
 
 #bulle20{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:70%;
+    left:72.5%;
     top:10px;
-    /* border: solid black 1px */
 }
 
 #bulle30{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:80%;
+    left:85%;
     top:5px;
-    /* border: solid black 1px */
 }
 
 #methodologie{

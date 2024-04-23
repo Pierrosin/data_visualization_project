@@ -47,7 +47,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
     
     colors = swarm['specie'].apply(lambda x: color)
     
-    ratio = figSize[0]*(ymax-ymin)/((figSize[1]-45)*(xmax-xmin))
+    ratio = figSize[0]*(ymax-ymin)/((figSize[1]-50)*(xmax-xmin))
     
     def isInEllipse(x, y, x0, y0, r1, r2):
         return ((x-x0)/r1)**2 + ((y-y0)/r2)**2 <= 1
@@ -92,7 +92,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
     fig = go.Figure()
     kwargs = {'type': 'circle', 'xref': 'x', 'yref': 'y'}
     points = [go.layout.Shape(x0=x-r/ratio, y0=y-r, x1=x+r/ratio, y1=y+r, fillcolor=c, line=dict(width=1, color='black'), **kwargs) for x, y, r, c in zip(x, y, size, colors)]
-    fig.update_layout(shapes=points, width=figSize[0], height=figSize[1], margin=dict(l=20, r=20, t=20, b=20))
+    fig.update_layout(shapes=points, width=figSize[0], height=figSize[1], margin=dict(l=20, r=20, t=20, b=20), hoverlabel_bgcolor='rgb(42, 63, 95)', dragmode=False)
     fig.update_xaxes(range=[xmin, xmax])  
     fig.update_yaxes(range=[ymin, ymax], tickvals=[])
     
@@ -113,7 +113,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
                             'font': dict(
                                 size=17,
                                 )},
-                        dtick=0.5, side='top')
+                    dtick=0.5, side='top')
     
     fig.add_vline(x=mean_growth, line_width=2, line_dash="dash", line_color="black", \
                   annotation_text=f'<b>Moyenne globale</b> : <b>{round(mean_growth, 2)} cm/an</b>',\

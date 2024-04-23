@@ -34,7 +34,8 @@ def draw_bar_chart(data, arrond, criterion, top):
         title_x=0.5,
         xaxis=dict(title="Nombre d'arbres", showline=False, linecolor='black'),
         yaxis=dict(title="", showline=False, linecolor='black'),
-        showlegend=False
+        showlegend=False,
+        dragmode=False
     )
     
     fig.update_traces(hovertemplate='%{x}')

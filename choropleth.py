@@ -2,8 +2,8 @@ import plotly.express as px
 
 def choropleth_hovertemplate() : 
     hover_template = "<b>%{customdata[0]}</b><br>" + \
-                     "<b>Nombre d'arbres</b>: %{customdata[1]}<br>" + \
-                     "<b>Densité d'arbres</b>: %{customdata[2]} arbres par km<sup>2</sup><br>"
+                     "<b>Nombre d'arbres</b> : %{customdata[1]}<br>" + \
+                     "<b>Densité d'arbres</b> : %{customdata[2]} arbres par km<sup>2</sup><br>"
     return hover_template + "<extra></extra>"
 
 def choropleth_hovertemplate_no_data() : 

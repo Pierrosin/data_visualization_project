@@ -65,7 +65,7 @@ def get_neighborhoods(montreal_data):
     return locations
 
 
-def get_nb_trees_district(df, min_plant_date, max_plant_date, min_dhp, max_dhp, species=None):
+def get_nb_trees_district(df, min_plant_date, max_plant_date, min_dhp, max_dhp, specie=None):
     # Filtrer les arbres plantés entre les dates min et max
     filtered_df = df[(df['Date_plantation'] >= min_plant_date) & (df['Date_plantation'] <= max_plant_date)]
 
@@ -73,8 +73,8 @@ def get_nb_trees_district(df, min_plant_date, max_plant_date, min_dhp, max_dhp, 
     filtered_df = filtered_df[(filtered_df['DHP'] >= min_dhp) & (filtered_df['DHP'] <= max_dhp)]
 
      # Filtrer les arbres pour inclure seulement les espèces spécifiées
-    if species:
-        filtered_df = filtered_df[filtered_df['Essence_fr'].isin(species)]
+    if specie:
+        filtered_df = filtered_df[filtered_df['Essence_fr'] == specie]
 
     # Compter le nombre d'arbres par arrondissement
     trees_per_district = filtered_df.groupby(['ARROND', 'ARROND_NOM']).size().reset_index(name='Nombre_Arbres')

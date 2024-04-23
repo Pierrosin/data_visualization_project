@@ -70,8 +70,8 @@ app.layout = html.Div(className='content', children=[
                 ]),
                 dcc.Dropdown(id='specie',
                     options=species,
-                    placeholder='Espèces',
-                    multi=True,
+                    placeholder='Espèce d\'arbre',
+                    multi=False,
                     style={"margin-top" : "3px"}
                 ),
                 html.Div(id='date', children=[
@@ -269,11 +269,11 @@ app.layout = html.Div(className='content', children=[
     Input('specie', 'value'),
     prevent_initial_call=True
 )
-def update_maps(critere_choropleth, date_range, dhp_range, species):
+def update_maps(critere_choropleth, date_range, dhp_range, specie):
     densite = critere_choropleth == "Densité d'arbres"
     nb_arbres_arrondissement = preprocess.get_nb_trees_district(data, pd.to_datetime(str(date_range[0]), format='%Y'), \
                                                                 pd.to_datetime(str(date_range[1] + 1), format='%Y'), \
-                                                                dhp_range[0], dhp_range[1], species)
+                                                                dhp_range[0], dhp_range[1], specie)
     missing_arrondissement = preprocess.get_missing_districts(nb_arbres_arrondissement, locations)
     data_arrondissement = preprocess.add_density(nb_arbres_arrondissement, 'assets/montreal.json')
     choropleth_updated = choropleth.get_choropleth(data_arrondissement, missing_arrondissement, montreal_data, densite=densite)
@@ -290,8 +290,8 @@ def update_maps(critere_choropleth, date_range, dhp_range, species):
     Input('specie', 'value'),
     prevent_initial_call=True
 )
-def update_maps(critere_carte_arrond, arr_carte_arrond, date_range, dhp_range, species):           
-    arrond_map_updated = arrond_map.getMap(data, arr_carte_arrond, critere_carte_arrond, (species, pd.to_datetime(str(date_range[0]), format='%Y'), pd.to_datetime(str(date_range[1] + 1), format='%Y'), dhp_range[0], dhp_range[1]))
+def update_maps(critere_carte_arrond, arr_carte_arrond, date_range, dhp_range, specie):           
+    arrond_map_updated = arrond_map.getMap(data, arr_carte_arrond, critere_carte_arrond, (specie, pd.to_datetime(str(date_range[0]), format='%Y'), pd.to_datetime(str(date_range[1] + 1), format='%Y'), dhp_range[0], dhp_range[1]))
         
     return arrond_map_updated
 
