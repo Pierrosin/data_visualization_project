@@ -1,6 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 
+# Mapping des noms des arrondissements entre le csv et le geojson
 mapping = {
     'Ahuntsic - Cartierville': 'Ahuntsic-Cartierville',
     'Villeray-Saint-Michel - Parc-Extension': 'Villeray-Saint-Michel-Parc-Extension',
@@ -20,10 +21,6 @@ mapping = {
 
 
 def preprocess_df(df) : 
-    # df['Date_plantation'] = pd.to_datetime(df['Date_plantation'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-    # df["Date_releve"] = pd.to_datetime(df["Date_releve"], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-    # Enlever les valeurs manquantes
-    # df = df.dropna(subset=['Date_plantation', 'Date_releve'])
     # Créer une colonne avec les dates en string
     df['Date_plantation_format'] = df['Date_plantation'].dt.strftime('%Y-%m-%d')
     df['Date_releve_format'] = df['Date_releve'].dt.strftime('%Y-%m-%d')
@@ -35,7 +32,7 @@ def preprocess_df(df) :
     return df
 
 def removeOutliers(df):
-    # clean = df[df['COTE'].isin(['N', 'S', 'E', 'O', 'I', 'P'])]
+    # Enlève les données aberrantes
     clean = df
     clean = clean[(clean['Coord_X'] > 270000) & (clean['Coord_X'] < 310000) & (clean['Coord_Y'] > 5030000) & (clean['Coord_Y'] < 5070000)]
     clean = clean.dropna(subset=['Essence_fr', 'ARROND_NOM', 'Rue', 'Emplacement', 'DHP'])
@@ -51,10 +48,11 @@ def removeOutliers(df):
     return clean
 
 def getSpeciesList(df):
+    # Retourne la liste des espèces triées
     return sorted(pd.unique(df['Essence_fr']))
 
-
 def get_neighborhoods(montreal_data):
+    # Retourne la liste des arrondissements du geojson
     locations = []
     for feature in montreal_data.get('features', []):
         properties = feature.get('properties', {})
@@ -72,7 +70,7 @@ def get_nb_trees_district(df, min_plant_date, max_plant_date, min_dhp, max_dhp, 
     # Filtrer les arbres avec DHP entre min et max
     filtered_df = filtered_df[(filtered_df['DHP'] >= min_dhp) & (filtered_df['DHP'] <= max_dhp)]
 
-     # Filtrer les arbres pour inclure seulement les espèces spécifiées
+    # Filtrer les arbres pour inclure seulement l'espèce spécifiée
     if specie:
         filtered_df = filtered_df[filtered_df['Essence_fr'] == specie]
 
