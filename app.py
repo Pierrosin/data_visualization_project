@@ -108,7 +108,7 @@ app.layout = html.Div(className='content', children=[
                         },
                     ),
                 ]),
-                html.Button(id='btn_info', n_clicks=0, children='?')
+                html.Button(id='btn_info', n_clicks=0, children='i')
             ]),
             
             html.Div(id='total', children=[
@@ -210,7 +210,7 @@ app.layout = html.Div(className='content', children=[
                                 clearable=False)
                             ],
                             style={"margin" : "10px", "width": "50%", "height": "36px"},),
-                        html.Button(id='btn_info_2', n_clicks=0, children='?')
+                        html.Button(id='btn_info_2', n_clicks=0, children='i')
             ]),
         ]),
         html.Div(id='swarm', children=[
@@ -221,7 +221,7 @@ app.layout = html.Div(className='content', children=[
                             searchable=True,
                             clearable=True),
                     
-                    html.Button(id='btn_info_3', n_clicks=0, children='?'),
+                    html.Button(id='btn_info_3', n_clicks=0, children='i'),
                     
                     html.Div(id='texte_especes_arbres', style={'display': 'flex', 'justify-content': 'flex-end', 'align-items': 'center', "fontSize": "10px"}, children=[
                         html.H2("Espèces\nd'arbres")
@@ -259,23 +259,24 @@ app.layout = html.Div(className='content', children=[
         html.Div(id='methodologie', children=[
             html.P(['Les données sur les arbres du domaine public proviennent du site de la ',
                 html.A('Ville de Montréal', href='https://donnees.montreal.ca/dataset/arbres?fbclid=IwAR0kXb318EgUdmDej3XoGVQymQsm_LXBjw-vmkqHNtw37sqwzh1Paqn1iRY', target='_blank'), '.']),
+            html.P('Le jeu de données comptabilise plus de 350 000 arbres et couvre une période allant de 1960 jusqu\'à aujourd\'hui.'),
             html.P('Un prétraitement a été effectué sur les données afin de ne garder que les arbres ayant leurs attributs valides (dates, espèce, diamètre du tronc...).')
         ]),
         html.Div(id='info_tooltip', style={'display': 'none'}, children=[
-            html.P("Ces deux cartes représentent l'ensemble des arbres du domaine public de la Ville de Montréal."),
-            html.P("La carte de gauche affiche chaque arrondissement de Montréal. Quand on passe la souris sur un arrondissement, les informations sur les arbres associées à cet arrondissement apparaissent."),
-            html.P("La carte de droite affiche les arbres présents dans l'arrondissement sélectionné. Chaque point représente un arbre et quand on passe la souris sur un point, les informations associées à l'arbre apparaissent."),
+            html.P("Ces deux cartes représentent la répartition des arbres du domaine public de la Ville de Montréal."),
+            html.P("La carte de gauche affiche chaque arrondissement de Montréal avec une couleur correspondant au nombre d'arbres ou à la densité d'arbres de l'arrondissement selon le critère d'échelle sélectionné. Quand on passe la souris sur un arrondissement, des informations sur les arbres associées à cet arrondissement apparaissent."),
+            html.P("La carte de droite affiche les arbres présents dans l'arrondissement sélectionné et représentés par des points dont la couleur correspond à la date de plantation, à la date de relevé ou au diamètre du tronc de l'arbre selon le critère d'échelle sélectionné. Quand on passe la souris sur un point, des informations associées à l'arbre apparaissent."),
             html.P("Vous pouvez filtrer les arbres de ces deux cartes selon l'espèce, la date de plantation et le diamètre du tronc.")
         ]),
         html.Div(id='info_tooltip_2', style={'display': 'none'}, children=[
             html.P("Ces deux graphiques représentent les classements des dix rues, emplacements ou espèces ayant le plus d'arbres selon le critère sélectionné."),
             html.P("Le graphique de gauche considère tous les arbres de la Ville de Montréal, peu importe dans quel arrondissement ils se situent."),
-            html.P("Le graphique de droite considère uniquement les arbres présents dans l'arrondissement sélectionné. En particulier, pour le classement des rues, on comptabilise pour chaque rue uniquement les arbres présents dans l'arrondissement sélectionné.")
+            html.P("Le graphique de droite considère uniquement les arbres présents dans l'arrondissement sélectionné. En particulier, pour le classement des rues, on ne comptabilise que les arbres présents dans la rue et l'arrondissement en question.")
         ]),
         html.Div(id='info_tooltip_3', style={'display': 'none'}, children=[
             html.P("Ce graphique représente la vitesse moyenne de croissance du tronc et le diamètre moyen du tronc de chaque espèce d'arbre de la Ville de Montréal."),
             html.P("Chaque bulle correspond à une espèce d'arbre, sa position le long de l'axe des abscisses correspond à sa vitesse moyenne de croissance du tronc et sa taille correspond au diamètre de son tronc."),
-            html.P("Vous pouvez mettre en évidence une espèce d'arbre grâce à l'outil de recherche.")
+            html.P("Vous pouvez mettre en évidence une espèce d'arbre grâce à l'outil de recherche en haut à gauche.")
         ]),
     ])
 ])
