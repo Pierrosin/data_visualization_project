@@ -12,7 +12,7 @@ def choropleth_hovertemplate_no_data() :
     return hover_template + "<extra></extra>"
 
 def get_choropleth(data_arrondissement, missing_data, montreal_data, densite=False) : 
-
+    # On adapte la couleur des arrondissements et le titre en fonction du critère sélectionné
     if densite : 
         color = 'Densite'
         title = "Nombre d'arbres <br> par km<sup>2</sup>"
@@ -20,27 +20,33 @@ def get_choropleth(data_arrondissement, missing_data, montreal_data, densite=Fal
         color = 'Nombre_Arbres'
         title="Nombre d'arbres"
 
+    # On affiche les arrondissements où il y a des données
     fig = px.choropleth_mapbox(data_arrondissement, geojson=montreal_data, color=color,
                             locations="ARROND_NOM", featureidkey="properties.NOM", color_continuous_scale=px.colors.sequential.Greens,
                             center={"lat": 45.545260, "lon": -73.727014},
                             mapbox_style="carto-positron", zoom=8.9, hover_data=["ARROND_NOM", "Nombre_Arbres", "Densite"])
 
+    # On affiche les arrondissements où il n'y a aucune donnée
     missing_areas = px.choropleth_mapbox(missing_data, geojson=montreal_data, color="Nombre_Arbres",color_discrete_sequence =['#CDD1C4'],
                                         locations="ARROND_NOM", featureidkey="properties.NOM",
                                         center={"lat": 45.569260, "lon": -73.707014}, hover_data=["ARROND_NOM", "Nombre_Arbres", "Densite"])
 
+    # Ajout des hovers pour les arrondissements où il y a des données
     fig.update_traces(
         hovertemplate=choropleth_hovertemplate()
     )
 
+    # Ajout des hovers pour les arrondissements où il n'y a aucune donnée
     for trace in missing_areas.data:
         trace.hovertemplate = choropleth_hovertemplate_no_data()
         fig.add_trace(trace)
-        
+    
+    # Ajustement de l'épaisseur de la bordure des arrondissements
     fig.update_traces(
         marker_line_width = 0.5
     )
 
+    # Mise en page du graphique
     fig.update_layout(
         title="<b>Vue de la Ville de Montréal</b>",
         title_x=0.5,

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import linregress
 
-
+# Calcule la vitesse moyenne de croissance du tronc des espèces d'arbres
 def getGrowthPerSpecie(data):
     try:
         a, _, _, _, _ =  linregress(data['Age'], data['DHP'])
@@ -12,12 +12,16 @@ def getGrowthPerSpecie(data):
         a = tree['DHP'] / tree['Age']
     return round(a*365,2)
 
+# Calcule le diamètre de tronc moyen des espèces d'arbres 
 def getMeanDHPPerSpecie(data):
     return data['DHP'].mean()
 
+# Crée un swarmplot des espèces d'arbres avec la taille de bulle selon le diamètre de tronc moyen 
+# et la position le long de l'axe des abscisses selon la vitesse moyenne de croissance du tronc
 def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.5, color='#36749d', seed=1):
     np.random.seed(seed)
     
+    # Pour chaque espèce, on calcule sa vitesse moyenne de croissance du tronc et diamètre de tronc moyen
     uniqueSpecies = pd.unique(data['Essence_fr'])
     species = []
     growth = []
@@ -33,20 +37,22 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
             species.append(specie)
             growth.append(getGrowthPerSpecie(buffer))
             meanDHP.append(getMeanDHPPerSpecie(buffer))
-        
+    
+    # On retire les outliers
     swarm = pd.DataFrame({'specie': species, 'growth':growth, 'dhp':meanDHP, 'trees':nbTrees}).dropna()
     swarm = swarm[(swarm['growth'] > 0) & (swarm['growth'] < 5)]
     maxDHP = swarm['dhp'].max()
     swarm = swarm[swarm['dhp'] > maxDHP/10]
     species = sorted(swarm['specie'])
     
+    # Calcul des tailles, positions x et couleurs des bulles
     swarm = swarm.sort_values('dhp', ascending=False)
     x = swarm['growth'].to_numpy()
     size = swarm['dhp'].to_numpy()/25
     mean_growth = swarm['growth'].mean()
-    
     colors = swarm['specie'].apply(lambda x: color)
     
+    # Ratio de hauteur/largeur des bulles
     ratio = figSize[0]*(ymax-ymin)/((figSize[1]-50)*(xmax-xmin))
     
     def isInEllipse(x, y, x0, y0, r1, r2):
@@ -74,6 +80,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
                 return True
         return False
 
+    # Calcul des positions y des bulles
     rmax = size.max()
     indexes = np.arange(len(x))
     y = []
@@ -89,6 +96,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
             yi+=ystep*dir
         y.append(yi)
 
+    # Création du swarmplot
     fig = go.Figure()
     kwargs = {'type': 'circle', 'xref': 'x', 'yref': 'y'}
     points = [go.layout.Shape(x0=x-r/ratio, y0=y-r, x1=x+r/ratio, y1=y+r, fillcolor=c, line=dict(width=1, color='black'), **kwargs) for x, y, r, c in zip(x, y, size, colors)]
@@ -96,6 +104,7 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
     fig.update_xaxes(range=[xmin, xmax])  
     fig.update_yaxes(range=[ymin, ymax], tickvals=[])
     
+    # Ajout des hovers
     fig.add_trace(go.Scatter(
         x=x,
         y=y,
@@ -109,19 +118,21 @@ def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.
                       ) + "<extra></extra>"
     ))
 
+    # Légende axe des abscisses
     fig.update_xaxes(title={'text': "<b>Vitesse moyenne de croissance du tronc (cm/an)</b>",
                             'font': dict(
                                 size=17,
                                 )},
                     dtick=0.5, side='top')
     
+    # Ajout de la ligne verticale de moyenne globale
     fig.add_vline(x=mean_growth, line_width=2, line_dash="dash", line_color="black", \
                   annotation_text=f'<b>Moyenne globale</b> : <b>{round(mean_growth, 2)} cm/an</b>',\
                   annotation_position='top right')
     
     return fig, species, swarm
 
-
+# Met en évidence une espèce d'arbre en grisant toutes les autres espèces
 def swarmPlot(fig, swarm, highlight_specie=None, color='#36749d'):
     if highlight_specie:
         colors = swarm['specie'].apply(lambda x: color if x == highlight_specie else 'lightgray')

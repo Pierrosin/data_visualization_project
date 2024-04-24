@@ -39,6 +39,7 @@ def getMap(data, arrondissement, critere, filter):
     # Couleur des points en fonction du critère
     color = data[critere].dt.year if critere in ['Date_plantation', 'Date_releve'] else data[critere]
     
+    # S'il n'y a pas d'arbre, on affiche un texte
     if data.empty:
         fig = px.scatter()
         fig.add_annotation(text="Aucun arbre à afficher.",
@@ -51,12 +52,14 @@ def getMap(data, arrondissement, critere, filter):
         fig.update_yaxes(showticklabels=False, showgrid=False, visible=False)
         fig.update_layout(dragmode = False)    
         
+    # Sinon, on affiche la carte avec les arbres
     else:
         fig = px.scatter_mapbox(data, color=color, lat='Latitude', lon='Longitude', 
                                 zoom=12.5, color_continuous_scale='tempo', hover_data=['Essence_fr', 'Date_plantation_format', 'Date_releve_format', 'DHP'])
         fig.update_layout(mapbox_style="open-street-map", coloraxis_colorbar=dict(title=title))
         fig.update_traces(hovertemplate=get_arrondissement_hover_template())
     
+    # Mise en page de la carte
     fig.update_layout(
         title=f"<b>Vue de l'arrondissement {arrondissement}</b>",
         title_x=0.5,
