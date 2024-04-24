@@ -1,7 +1,7 @@
 body {
-    font-family: 'Arial', 'sans-serif';
+    font-family: 'Arial';
     font-size: 16px;
-    color: #362023;
+    color: rgb(40, 40, 40);
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -24,7 +24,6 @@ main {
     flex-direction: column;
     justify-content: space-between;
     height: 100vh;
-    /* padding-bottom: 81%;  */
 }
 
 .viz-container {
@@ -38,10 +37,9 @@ main {
 }
 
 h1 {
-    /* font-family: 'Montserrat'; */
-    font-family: 'Arial';
-    color: #362023;
-    font-size: 40px;
+    font-family: 'Montserrat';
+    color: rgb(33, 49, 73);
+    font-size: 38px;
     margin: 0;
     font-weight: normal;
 }
@@ -62,20 +60,23 @@ h6 {
 
 #filter{ 
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(200, 200, 200) 2px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     left:0;
     top: 0;
     width:100%;
-    height: 61px;
+    height: 62px;
+    border-bottom: none;
 }
 #total{ 
-    
     left:0;
     top: 11%;
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(200, 200, 200) 2px;
+    border-bottom-left-radius: 15px;
     border-right: none;
 }
 #arrond{ 
@@ -84,14 +85,23 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(200, 200, 200) 2px;
+    border-bottom-right-radius: 15px;
+}
+
+#text_filter{
+    position:absolute;
+    width:20%;
+    height:60%;
+    left:2%;
+    top:10%;
 }
 
 #specie{
     position:absolute;
     width:20%;
     height:60%;
-    left:10%;
+    left:12%;
     top:10%;
 }
 
@@ -111,12 +121,106 @@ h6 {
     top:5%;
 }
 
+#btn_info{
+    position:absolute;
+    right:50px;
+    top:17px;
+    font-size: 18px;
+    color: white;
+    border: 0px;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    background-color: rgb(100, 100, 100);
+    font-family: 'Geneva';
+}
+
+#info_tooltip{
+    position:absolute;
+    width: 400px;
+    right: 90px;
+    top:145px;
+    text-align: justify;
+    background-color: rgb(225, 225, 225);
+    padding-left: 20px;
+    padding-right: 20px;
+    border: solid rgb(100, 100, 100) 1px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+#choropleth{
+    position:absolute;
+    top: 15px;
+    width: 100%;
+    height: 490px;
+}
+
+#div_critere_choropleth{
+    position:absolute;
+    top: 450px;
+}
+
+#text_critere_choropleth{
+    position:absolute;
+    width:125px;
+    left:20px;
+    top:5px;
+}
+
+#critere_choropleth{
+    position:absolute;
+    width:180px;
+    left:150px;
+    top:13px;
+}
+
+#carte_arrond{
+    position:absolute;
+    top: 15px;
+    width: 100%;
+    height:490px;
+}
+
+#div_critere_carte_arrond{
+    position:absolute;
+    top: 450px;
+}
+
+#text_critere_carte_arrond{
+    position:absolute;
+    width:125px;
+    left:20px;
+    top:5px;
+}
+
+#critere_carte_arrond{
+    position:absolute;
+    width:180px;
+    left:150px;
+    top:13px;
+}
+
+#text_arr_carte_arrond{
+    position:absolute;
+    width:125px;
+    left:350px;
+    top:5px;
+}
+
+#arr_carte_arrond{
+    position:absolute;
+    width:230px;
+    left:480px;
+    top:13px;
+}
+
 #barCharts{
     position:absolute;
     height: 550px;;
     width:98%;
     left:1%;
-    top: 680px;
+    top: 690px;
 }
 
 #divBarChartVille{ 
@@ -125,7 +229,9 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px;
+    border: solid rgb(200, 200, 200) 2px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
     border-right: none;
 }
 #DivBarChartArrond{ 
@@ -134,7 +240,101 @@ h6 {
     width:50%;
     height:92.54%;
     position:absolute;
-    border: solid rgb(120, 120, 120) 2px
+    border: solid rgb(200, 200, 200) 2px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+#barChartArrond{
+    position:absolute;
+    top: 20px;
+    width: 100%;
+}
+
+#barChartVille{
+    position:absolute;
+    top: 20px;
+    width: 100%;
+}
+
+#div_critere_bar_chart_arrond{
+    position:absolute;
+    top: 435px;
+}
+
+#div_critere_bar_chart_ville{
+    position:absolute;
+    top: 435px;
+}
+
+#text_critere_bar_chart_ville{
+    position:absolute;
+    width:175px;
+    left:20px;
+    top:5px;
+}
+
+#critere_bar_chart_ville{
+    position:absolute;
+    width:160px;
+    left:167px;
+    top:13px;
+}
+
+#text_critere_bar_chart_arrond{
+    position:absolute;
+    width:175px;
+    left:20px;
+    top:5px;
+}
+
+#critere_bar_chart_arrond{
+    position:absolute;
+    width:160px;
+    left:167px;
+    top:13px;
+}
+
+#text_arr_bar_chart_arrond{
+    position:absolute;
+    width:125px;
+    left:350px;
+    top:5px;
+}
+
+#arr_bar_chart_arrond{
+    position:absolute;
+    width:230px;
+    left:477px;
+    top:13px;
+}
+
+#btn_info_2{
+    position:absolute;
+    right:50px;
+    top:31px;
+    font-size: 18px;
+    color: white;
+    border: 0px;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    background-color: rgb(100, 100, 100);
+    font-family: 'Geneva';
+}
+
+#info_tooltip_2{
+    position:absolute;
+    width: 400px;
+    right: 90px;
+    top:775px;
+    text-align: justify;
+    background-color: rgb(225, 225, 225);
+    padding-left: 20px;
+    padding-right: 20px;
+    border: solid rgb(100, 100, 100) 1px;
+    border-radius: 5px;
+    z-index: 1000;
 }
 
 #swarm{
@@ -142,28 +342,53 @@ h6 {
     height: 680px;
     width:98%;
     left:1%;
-    top: 1235px;
-    border: solid rgb(120, 120, 120) 2px;
+    top: 1255px;
+    border: solid rgb(200, 200, 200) 2px;
+    border-radius: 15px;
     margin-bottom: 100px;
+}
+
+#btn_info_3{
+    position:absolute;
+    right:50px;
+    top:32px;
+    font-size: 18px;
+    color: white;
+    border: 0px;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    background-color: rgb(100, 100, 100);
+    font-family: 'Geneva';
+}
+
+#info_tooltip_3{
+    position:absolute;
+    width: 400px;
+    right: 90px;
+    top:1315px;
+    text-align: justify;
+    background-color: rgb(225, 225, 225);
+    padding-left: 20px;
+    padding-right: 20px;
+    border: solid rgb(100, 100, 100) 1px;
+    border-radius: 5px;
+    z-index: 1000;
 }
 
 #espece_swarm{
     position:absolute;
-    /* height:10%; */
-    width:25%;
-    /* left:1%; */
-    margin: 10px;
-    /* top:1%; */
-    /* border: solid black 1px */
+    width:310px;
+    margin-top: 20px;
+    margin-left: 27px;
 }
 
 #texte_especes_arbres{
     position:absolute;
-    height:80%;
+    height:300px;
     width:65px;
-    left:15px;
-    top:10%;
-    /* border: solid black 1px */
+    left:18px;
+    top:185px;
 }
 
 #swarm_plot{
@@ -172,61 +397,49 @@ h6 {
     width:88%;
     left:80px;
     top:10%;
-    /* border: solid black 1px */
 }
 
 #swarm_legend{
     position:absolute;
     height:10%;
     width:80%;
-    left:10%;
+    left:15.5%;
     top:85%;
-    /* border: solid black 1px */
 }
 
 #bulle5{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:40%;
-    /* top:85%; */
-    /* border: solid black 1px */
-}
-
-#bulle5{
-    position:absolute;
-    /* height:10%; */
-    /* width:80%; */
     left:50%;
     top:20px;
-    /* border: solid black 1px */
 }
 
 #bulle10{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:60%;
+    left:61%;
     top:15px;
-    /* border: solid black 1px */
 }
 
 #bulle20{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:70%;
+    left:72.5%;
     top:10px;
-    /* border: solid black 1px */
 }
 
 #bulle30{
     position:absolute;
-    /* height:10%; */
-    /* width:80%; */
-    left:80%;
+    left:85%;
     top:5px;
-    /* border: solid black 1px */
+}
+
+#methodologie{
+    position:absolute;
+    height: 135px;
+    width:96%;
+    left:3%;
+    top: 1960px;
+    text-align: center;
+    font-size: 15px;
+    color: rgb(110, 110, 110)
 }
 
 .cursor{

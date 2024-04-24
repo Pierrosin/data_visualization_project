@@ -15,7 +15,9 @@ def getGrowthPerSpecie(data):
 def getMeanDHPPerSpecie(data):
     return data['DHP'].mean()
 
-def swarm(data):
+def swarm(data, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.5, color='#36749d', seed=1):
+    np.random.seed(seed)
+    
     uniqueSpecies = pd.unique(data['Essence_fr'])
     species = []
     growth = []
@@ -38,22 +40,14 @@ def swarm(data):
     swarm = swarm[swarm['dhp'] > maxDHP/10]
     species = sorted(swarm['specie'])
     
-    return swarm, species
-
-
-def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5, ymin=-25, ymax=25, ystep=0.5, color='#36749d', seed=1):
-    np.random.seed(seed)
     swarm = swarm.sort_values('dhp', ascending=False)
     x = swarm['growth'].to_numpy()
     size = swarm['dhp'].to_numpy()/25
     mean_growth = swarm['growth'].mean()
     
-    if highlight_specie:
-        colors = swarm['specie'].apply(lambda x: color if x == highlight_specie else 'lightgray')
-    else:
-        colors = swarm['specie'].apply(lambda x: color)
+    colors = swarm['specie'].apply(lambda x: color)
     
-    ratio = figSize[0]*(ymax-ymin)/(figSize[1]*(xmax-xmin))
+    ratio = figSize[0]*(ymax-ymin)/((figSize[1]-50)*(xmax-xmin))
     
     def isInEllipse(x, y, x0, y0, r1, r2):
         return ((x-x0)/r1)**2 + ((y-y0)/r2)**2 <= 1
@@ -98,7 +92,7 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
     fig = go.Figure()
     kwargs = {'type': 'circle', 'xref': 'x', 'yref': 'y'}
     points = [go.layout.Shape(x0=x-r/ratio, y0=y-r, x1=x+r/ratio, y1=y+r, fillcolor=c, line=dict(width=1, color='black'), **kwargs) for x, y, r, c in zip(x, y, size, colors)]
-    fig.update_layout(shapes=points, width=figSize[0], height=figSize[1], margin=dict(l=20, r=20, t=20, b=20))
+    fig.update_layout(shapes=points, width=figSize[0], height=figSize[1], margin=dict(l=20, r=20, t=20, b=20), hoverlabel_bgcolor='rgb(42, 63, 95)', dragmode=False)
     fig.update_xaxes(range=[xmin, xmax])  
     fig.update_yaxes(range=[ymin, ymax], tickvals=[])
     
@@ -115,10 +109,26 @@ def swarmPlot(swarm, highlight_specie=None, figSize=(1400, 500), xmin=0, xmax=5,
                       ) + "<extra></extra>"
     ))
 
-    fig.update_xaxes(title="Vitesse moyenne de croissance du tronc (cm/an)", dtick=0.5, side='top')
+    fig.update_xaxes(title={'text': "<b>Vitesse moyenne de croissance du tronc (cm/an)</b>",
+                            'font': dict(
+                                size=17,
+                                )},
+                    dtick=0.5, side='top')
     
     fig.add_vline(x=mean_growth, line_width=2, line_dash="dash", line_color="black", \
                   annotation_text=f'<b>Moyenne globale</b> : <b>{round(mean_growth, 2)} cm/an</b>',\
                   annotation_position='top right')
+    
+    return fig, species, swarm
+
+
+def swarmPlot(fig, swarm, highlight_specie=None, color='#36749d'):
+    if highlight_specie:
+        colors = swarm['specie'].apply(lambda x: color if x == highlight_specie else 'lightgray')
+    else:
+        colors = swarm['specie'].apply(lambda x: color)
+        
+    for i, color in enumerate(colors):
+        fig.layout.shapes[i].fillcolor = color
     
     return fig
